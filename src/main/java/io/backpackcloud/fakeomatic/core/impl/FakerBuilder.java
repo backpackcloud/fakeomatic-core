@@ -8,7 +8,9 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.backpackcloud.fakeomatic.core.impl.jackson.SampleDeserializer;
 import io.backpackcloud.fakeomatic.core.spi.Faker;
 import io.backpackcloud.fakeomatic.core.spi.Sample;
+import io.backpackcloud.zipper.Configuration;
 import io.backpackcloud.zipper.UnbelievableException;
+import io.backpackcloud.zipper.impl.jackson.ConfigurationDeserializer;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,12 +23,13 @@ import java.util.Random;
 
 public class FakerBuilder {
 
-  private final Map<String, Sample>    samples;
-  private final Map<Character, String> placeholders;
-  private final RootFaker              rootFaker;
-  private final ObjectMapper           mapper;
-  private final SampleDeserializer     deserializer;
-  private final InjectableValues.Std   std;
+  private final Map<String, Sample>       samples;
+  private final Map<Character, String>    placeholders;
+  private final RootFaker                 rootFaker;
+  private final ObjectMapper              mapper;
+  private final SampleDeserializer        sampleDeserializer;
+  private final ConfigurationDeserializer configurationDeserializer;
+  private final InjectableValues.Std      std;
 
   public FakerBuilder(Random random) {
     samples = new HashMap<>();
@@ -42,8 +45,12 @@ public class FakerBuilder {
     mapper.setInjectableValues(std);
 
     SimpleModule module = new SimpleModule();
-    deserializer = new SampleDeserializer(mapper);
-    module.addDeserializer(Sample.class, deserializer);
+
+    sampleDeserializer = new SampleDeserializer(mapper);
+    configurationDeserializer = new ConfigurationDeserializer();
+
+    module.addDeserializer(Sample.class, sampleDeserializer);
+    module.addDeserializer(Configuration.class, configurationDeserializer);
 
     mapper.registerModule(module);
   }
@@ -53,7 +60,7 @@ public class FakerBuilder {
   }
 
   public FakerBuilder register(String type, Class<? extends Sample> sampleClass) {
-    deserializer.register(type, sampleClass);
+    sampleDeserializer.register(type, sampleClass);
     return this;
   }
 
