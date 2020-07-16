@@ -35,12 +35,18 @@ import java.util.function.Supplier;
 public interface Sample<E> extends Supplier<E> {
 
   /**
-   * Gets one sample of the data this sample holds.
+   * Gets one sample of the data this object holds.
    *
    * @return a sample data. Might be random.
    */
   E get();
 
+  /**
+   * Creates a new Sample that always returns the given value.
+   *
+   * @param value the value to return
+   * @return a new Sample
+   */
   static <E> Sample<E> of(E value) {
     return () -> value;
   }
