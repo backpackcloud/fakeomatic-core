@@ -24,6 +24,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Deserializer for parsing sample configuration using Jackson.
+ */
 public class SampleDeserializer extends JsonDeserializer<Sample> {
 
   private final ObjectMapper mapper;
@@ -47,6 +50,13 @@ public class SampleDeserializer extends JsonDeserializer<Sample> {
     this.sampleTypes.put("weight", WeightedSample.class);
   }
 
+  /**
+   * Registers a new Sample.
+   *
+   * @param type        the identifier to use
+   * @param sampleClass the class of the Sample to register
+   * @return this instance.
+   */
   public SampleDeserializer register(String type, Class<? extends Sample> sampleClass) {
     this.sampleTypes.put(type, sampleClass);
     return this;
