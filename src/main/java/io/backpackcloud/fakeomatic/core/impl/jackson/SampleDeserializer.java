@@ -1,16 +1,15 @@
 package io.backpackcloud.fakeomatic.core.impl.jackson;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.backpackcloud.fakeomatic.core.impl.sample.CachedSample;
 import io.backpackcloud.fakeomatic.core.impl.sample.CharSample;
-import io.backpackcloud.fakeomatic.core.impl.sample.JoiningSample;
 import io.backpackcloud.fakeomatic.core.impl.sample.DateSample;
 import io.backpackcloud.fakeomatic.core.impl.sample.ExpressionSample;
+import io.backpackcloud.fakeomatic.core.impl.sample.JoiningSample;
 import io.backpackcloud.fakeomatic.core.impl.sample.JsonValueSample;
 import io.backpackcloud.fakeomatic.core.impl.sample.ListSample;
 import io.backpackcloud.fakeomatic.core.impl.sample.RangeSample;
@@ -63,7 +62,7 @@ public class SampleDeserializer extends JsonDeserializer<Sample> {
   }
 
   @Override
-  public Sample deserialize(JsonParser jsonParser, DeserializationContext ctx) throws IOException, JsonProcessingException {
+  public Sample deserialize(JsonParser jsonParser, DeserializationContext ctx) throws IOException {
     JsonNode jsonNode = ctx.readTree(jsonParser);
 
     String type = jsonNode.at("/type").asText();
